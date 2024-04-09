@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Screen</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+        }
+        body, html {
+            height: 100%;
+        }
+        #background {
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }        
+        #card {
+            background-color: #fff;
+            margin-bottom: 20%;
+            border: 1px solid rgba(0, 40, 100, 0.12);
+            border-radius: 3px;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        #cardBody {
+            flex-direction: column;
+        }
+        .logo {
+            height: 280px;
+            width: 300px;
+            margin: 0 35px;
+        }
+        #cardTextContainer {
+            font-size: large;
+            font-family:"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; 
+            font-weight: 400;
+            display: block;
+            word-wrap: break-word;
+            margin: 0px 0px 20px 10px;
+        }
+        #loginHeader {
+            margin: 0px 0px 10px 0px;
+        }
+        #labelEmail {
+            font-size: medium;
+        }
+        #labelSenha {
+            font-size: medium;
+        }                
+        .lemail {
+            height: 22px;
+            width: 94%;
+            padding: 1px;
+            font-size: small;
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            border-radius: 1px;
+        }
+        .lemail:focus {
+            border: 1px solid rgba(0, 0, 0, 1);
+            border-radius: 1px;
+        }
+        .submitButton {
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 2px 4px;
+            margin: 10px 2px 0px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div id="card">
+            <div id="cardBody">
+                <a href="https://www.flaticon.com/free-icon/signup_5599504">
+                    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/5599/5599504.png">
+                </a>
+                <div id="cardTextContainer">
+                    <p id="loginHeader">
+                        Faça seu novo cadastro: 
+                    </p>
+                    <form id="form" method="get">
+                        <label id="labelEmail"><strong>Endereço de e-mail:</strong></label><br>
+                        <input type="email" class="lemail" name="cadastroEmail" id="cadastroEmail" placeholder="exemplo@ufrn.edu.br" required></input><br>
+                        <label id="labelSenha"><strong>Senha:</strong></label><br>
+                        <input type="text" class="lemail" name="cadastroSenha" id="cadastroSenha" placeholder="sua_senha" required></input>       
+                        <input type="submit" value="Cadastrar" class="submitButton"/>             
+                        <input type="reset" class="submitButton"/>    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var form = document.getElementById("form")
+        form.onsubmit = function (e) {
+            e.preventDefault()
+
+            const data = new FormData(e.target);
+
+            const email = data.get("cadastroEmail")
+            const senha = data.get("cadastroSenha")
+            const novoCadastro = {
+                "user": email,
+                "password": senha
+            };
+
+            fetch('http://localhost:3000/0', {
+                method: 'PUT',
+                body: JSON.stringify(novoCadastro),
+                headers: {
+                    'Content-type': 'application/json'
+                },
+            })
+            .then((res) => {
+                if (res.ok) {
+                    alert("Usuário cadastrado com sucesso.");
+                } else {
+                    alert("Erro ao cadastrar usuário.");
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao cadastrar usuário:', error);
+            })
+        }
+    </script>
+</body>
+</html>

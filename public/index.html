@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Screen</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+        }
+        body, html {
+            height: 100%;
+        }
+        #background {
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }        
+        #card {
+            background-color: #fff;
+            margin-bottom: 20%;
+            border: 1px solid rgba(0, 40, 100, 0.12);
+            border-radius: 3px;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        #cardBody {
+            flex-direction: column;
+        }
+        .logo {
+            height: 280px;
+            width: 300px;
+            margin: 0 35px;
+        }
+        #cardTextContainer {
+            font-size: large;
+            font-family:"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; 
+            font-weight: 400;
+            display: block;
+            word-wrap: break-word;
+            margin: 0px 0px 20px 10px;
+        }
+        #loginHeader {
+            margin: 0px 0px 10px 0px;
+        }
+        #labelEmail {
+            font-size: medium;
+        }
+        #labelSenha {
+            font-size: medium;
+        }                
+        .lemail {
+            height: 22px;
+            width: 94%;
+            padding: 1px;
+            font-size: small;
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            border-radius: 1px;
+        }
+        .lemail:focus {
+            border: 1px solid rgba(0, 0, 0, 1);
+            border-radius: 1px;
+        }
+        .submitButton {
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 2px 4px;
+            margin: 10px 2px 0px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div id="card">
+            <div id="cardBody">
+                <a href="https://br.pinterest.com/pin/597993656751411484/">
+                    <img class="logo" src="https://i.pinimg.com/1200x/89/7a/61/897a61f56ec18239c658bf02cdba1b6e.jpg">
+                </a>
+                <div id="cardTextContainer">
+                    <p id="loginHeader">
+                        Faça login na sua conta.
+                    </p>
+                    <form id="form" method="get">
+                        <label id="labelEmail"><strong>Endereço de e-mail:</strong></label><br>
+                        <input type="email" class="lemail" name="email" id="email" placeholder="exemplo@ufrn.edu.br" required></input><br>
+                        <label id="labelSenha"><strong>Senha:</strong></label><br>
+                        <input type="password" class="lemail" name="senha" id="senha" placeholder="******************" required></input>       
+                        <input type="submit" value="Entrar" class="submitButton"/>             
+                        <input type="reset" class="submitButton"/>    
+                    </form>
+                    <br>
+                    <a href="cadastro.html">Não tem cadastro?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var form = document.getElementById('form')
+
+        form.onsubmit = function (e){
+            e.preventDefault()
+
+            const data = new FormData(e.target)
+
+            const email = data.get('email')
+            const senha = data.get("senha")
+            const json = {
+                "user": email,
+                "password": senha
+            }
+
+            fetch('http://localhost:3000/0')
+                .then((res) => res.json())
+                .then(logins => {
+                    const arquivos = logins["logins"]
+                    const credencialValida = arquivos.some(arquivos => {
+                        return arquivos.user === json.user && arquivos.password === json.password;
+                    });
+                                
+                    if (credencialValida) {
+                        alert("Credenciais válidas, acesso liberado.")
+                        console.log(logins)
+                    } else {
+                        alert("Credenciais inválidas, acesso negado.")
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao fazer login: ', error);
+                    alert('Erro ao fazer login. Por favor, tente novamente.')
+                })
+            }
+
+    </script>
+</body>
+</html>
